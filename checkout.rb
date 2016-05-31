@@ -6,6 +6,13 @@ class Price
   end
 end
 
+class Discount
+  @discounts = {a: {quantity: 3, discount:20}}
+  def self.for(basket)
+    0
+  end
+end
+
 class Checkout
   def initialize
     @items = []
@@ -15,7 +22,18 @@ class Checkout
     @items.push(item)
   end
 
+  def sub_total(basket)
+   basket
+    .map { |k, v| {sku: k, qty: v.length} }
+    .reduce(0) do |memo, i|
+     memo += Price.for(i[:sku]) * i[:qty]
+   end
+  end
+
   def total
-    @items.reduce(0) { |memo, item| memo += Price.for(item) }
+    basket = @items.group_by { |i| i }
+                  #  .map { |k, v| {k => v.length} }
+                  #  .reduce(:merge)
+    sub_total(basket) - Discount.for(basket)
   end
 end
