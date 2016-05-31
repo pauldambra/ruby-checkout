@@ -7,9 +7,22 @@ class Price
 end
 
 class Discount
-  @discounts = {a: {quantity: 3, discount:20}}
+  DISCOUNTS = {a: {quantity: 3, discount:20}}
+
+  def self.calculate_discount(sku, quantity)
+    return 0 unless DISCOUNTS.key? sku
+
+    discount_quantity = DISCOUNTS[sku][:quantity]
+    eligible_count = (quantity / discount_quantity).floor
+    eligible_count * DISCOUNTS[sku][:discount]
+  end
+
   def self.for(basket)
-    0
+    basket
+      .map { |k, v| {sku: k, items: v} }
+      .reduce(0) do |memo, i|
+        memo += calculate_discount i[:sku], i[:items].length
+      end
   end
 end
 
@@ -32,8 +45,6 @@ class Checkout
 
   def total
     basket = @items.group_by { |i| i }
-                  #  .map { |k, v| {k => v.length} }
-                  #  .reduce(:merge)
     sub_total(basket) - Discount.for(basket)
   end
 end
