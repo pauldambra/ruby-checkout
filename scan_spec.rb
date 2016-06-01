@@ -9,9 +9,10 @@ require './checkout'
 #   D     15
 #
 RSpec.describe Checkout do
+  let(:checkout) { Checkout.new }
+
   describe "scanning a single A" do
     it "returns a total of 50" do
-      checkout = Checkout.new
       checkout.scan(:a)
       expect(checkout.total).to eq(50)
     end
@@ -19,7 +20,6 @@ RSpec.describe Checkout do
 
   describe "scanning 2 As" do
     it "returns a total of 100" do
-      checkout = Checkout.new
       checkout.scan(:a)
       checkout.scan(:a)
       expect(checkout.total).to eq(100)
@@ -28,7 +28,6 @@ RSpec.describe Checkout do
 
   describe "scanning a single B" do
     it "returns a total of 30" do
-      checkout = Checkout.new
       checkout.scan(:b)
       expect(checkout.total).to eq(30)
     end
@@ -36,7 +35,6 @@ RSpec.describe Checkout do
 
   describe "scanning a single C" do
     it "returns a total of 20" do
-      checkout = Checkout.new
       checkout.scan(:c)
       expect(checkout.total).to eq(20)
     end
@@ -44,7 +42,6 @@ RSpec.describe Checkout do
 
   describe "scanning a single D" do
     it "returns a total of 15" do
-      checkout = Checkout.new
       checkout.scan(:d)
       expect(checkout.total).to eq(15)
     end
@@ -52,7 +49,6 @@ RSpec.describe Checkout do
 
   describe "scanning one of each" do
     it "returns a total of 115" do
-      checkout = Checkout.new
       checkout.scan(:d)
       checkout.scan(:c)
       checkout.scan(:b)
